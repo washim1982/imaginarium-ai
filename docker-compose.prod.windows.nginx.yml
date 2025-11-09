@@ -1,0 +1,26 @@
+services:
+  nginx-prod:
+    # Windows host path to win-acme exported PEMs
+    volumes:
+      - "C:\\imaginarium-ai\\letsencrypt:/etc/letsencrypt:ro"
+    restart: unless-stopped
+
+  backend-prod:
+    restart: unless-stopped
+
+  frontend-prod:
+    restart: unless-stopped
+
+  ollama-prod:
+    restart: unless-stopped
+
+# Usage (PowerShell):
+# docker compose -f docker-compose.prod.yml -f docker-compose.prod.windows.nginx.yml up --build -d
+#
+# Expected cert layout on host (created by win-acme):
+#   C:\imaginarium-ai\letsencrypt\live\custom-data.xenomorphy-ai.com\fullchain.pem
+#   C:\imaginarium-ai\letsencrypt\live\custom-data.xenomorphy-ai.com\privkey.pem
+#
+# Ensure nginx.prod.conf uses these inside-container paths:
+#   ssl_certificate /etc/letsencrypt/live/custom-data.xenomorphy-ai.com/fullchain.pem;
+#   ssl_certificate_key /etc/letsencrypt/live/custom-data.xenomorphy-ai.com/privkey.pem;

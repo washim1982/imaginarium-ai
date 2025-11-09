@@ -1,0 +1,59 @@
+# ---------- FRONTEND PROD IMAGE ----------
+FROM node:18-bullseye AS build
+WORKDIR /app
+
+# Build args (optional). If provided via compose, they override .env.production injection below.
+ARG REACT_APP_AUTH0_DOMAIN
+ARG REACT_APP_AUTH0_CLIENT_ID
+ARG REACT_APP_AUTH0_AUDIENCE
+
+COPY frontend/package*.json ./
+RUN npm ci --legacy-peer-deps
+COPY frontend ./
+
+# Inject REACT_APP_* values for production build from repo root .env.production if present,
+# then overlay any explicitly-provided build args.
+COPY ./.env.production /tmp/root.env.production
+RUN set -e; \
+    if [ -f /tmp/root.env.production ]; then \
+      grep '^REACT_APP_' /tmp/root.env.production > /app/.env.production || true; \
+    fi; \
+    if [ -n "$REACT_APP_AUTH0_DOMAIN" ]; then \
+      echo REACT_APP_AUTH0_DOMAIN=$REACT_APP_AUTH0_DOMAIN >> /app/.env.production; \
+    fi; \
+    if [ -n "$REACT_APP_AUTH0_CLIENT_ID" ]; then \
+      echo REACT_APP_AUTH0_CLIENT_ID=$REACT_APP_AUTH0_CLIENT_ID >> /app/.env.production; \
+    fi; \
+    if [ -n "$REACT_APP_AUTH0_AUDIENCE" ]; then \
+      echo REACT_APP_AUTH0_AUDIENCE=$REACT_APP_AUTH0_AUDIENCE >> /app/.env.production; \
+    fi; \
+    echo "Using frontend env:" && ( [ -f /app/.env.production ] && cat /app/.env.production || echo "<none>");
+
+# Generate a public/env.js file that exposes the same values at runtime
+# Include a build stamp so you can verify fresh deploys
+RUN mkdir -p /app/public && \
+    BUILD_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ) && \
+    printf "window.__CONFIG__=%s;\n" \
+      "{\"AUTH0_DOMAIN\":\"$REACT_APP_AUTH0_DOMAIN\",\"AUTH0_CLIENT_ID\":\"$REACT_APP_AUTH0_CLIENT_ID\",\"AUTH0_AUDIENCE\":\"$REACT_APP_AUTH0_AUDIENCE\",\"BUILD_AT\":\"$BUILD_AT\"}" \
+      > /app/public/env.js
+
+# Also export them as ENV so react-scripts can read from process.env at build time
+ENV REACT_APP_AUTH0_DOMAIN=$REACT_APP_AUTH0_DOMAIN \
+    REACT_APP_AUTH0_CLIENT_ID=$REACT_APP_AUTH0_CLIENT_ID \
+    REACT_APP_AUTH0_AUDIENCE=$REACT_APP_AUTH0_AUDIENCE
+RUN printenv | grep '^REACT_APP_' || true
+
+RUN npm run build
+
+FROM nginx:1.27-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+# Ensure runtime config is present even if CRA doesn't copy arbitrary public files
+COPY --from=build /app/public/env.js /usr/share/nginx/html/env.js
+# Ensure env.js loads BEFORE the hashed main.*.js bundle so runtime config is available
+# 1) Remove any existing env.js tag to avoid duplicates
+RUN sed -i 's#<script src="/env.js"></script>##g' /usr/share/nginx/html/index.html || true
+# 2) Insert env.js immediately after the opening <head>
+RUN sed -i 's#<head>#<head><script src="/env.js"></script>#' /usr/share/nginx/html/index.html || true
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

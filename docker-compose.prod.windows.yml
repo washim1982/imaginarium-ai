@@ -1,0 +1,34 @@
+services:
+  # Swap nginx for Caddy with auto-HTTPS
+  nginx-prod:
+    image: caddy:2
+    container_name: caddy-prod
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - frontend-prod
+      - backend-prod
+    networks:
+      - imaginarium
+    restart: unless-stopped
+
+  backend-prod:
+    restart: unless-stopped
+
+  frontend-prod:
+    restart: unless-stopped
+
+  ollama-prod:
+    restart: unless-stopped
+
+volumes:
+  caddy-data:
+  caddy-config:
+
+# Usage (PowerShell):
+# docker compose -f docker-compose.prod.yml -f docker-compose.prod.windows.yml up --build -d
