@@ -1,0 +1,156 @@
+@import "./page-base.css";
+
+.sql .grid {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;                     /* two fixed columns */
+    grid-template-areas:
+        "schema pairs"
+        "trainer compare";                             /* force row alignment */
+    gap: 3rem 3rem;                                /* row-gap, column-gap */
+    align-items: stretch;                                /* equal height within a row */
+}
+
+.sql .grid > div {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 18px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    backdrop-filter: blur(10px);
+    display: flex;              /* allow vertical stretching */
+    flex-direction: column;     /* title/content/actions layout */
+    height: 100%;
+    overflow: hidden;           /* prevent children from spilling out */
+}
+
+/* Map cards to named grid areas for strict alignment */
+.sql .schema-card { grid-area: schema; }
+.sql .pairs-card { grid-area: pairs; }
+.sql .trainer-card { grid-area: trainer; }
+.sql .compare-card { grid-area: compare; }
+
+.sql textarea { 
+    height: 240px; 
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; 
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.sql .pairs-wrapper {
+    max-height: 320px;
+    overflow: auto;
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    background: var(--panel-bg);
+    backdrop-filter: blur(10px);
+}
+
+.sql table { width:100%; border-collapse: collapse; table-layout: fixed; }
+.sql th, .sql td { 
+    padding: .5rem .6rem; 
+    border-bottom: 1px solid var(--panel-border);
+    vertical-align: top; 
+}
+.sql .pairs pre { margin: 0; white-space: pre-wrap; word-break: break-word; }
+.sql .actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.6rem;
+    flex-wrap: wrap;
+}
+.sql .actions button {
+    flex: 1;
+    min-width: 140px;
+}
+
+.sql .trainer-card {
+    margin-top: 0;              /* align with compare card in the same row */
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 18px;
+    padding: 1.2rem;
+    /* Remove fixed max-width so it can match the compare card width */
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    backdrop-filter: blur(10px);
+    min-height: 260px;          /* consistent height with compare card */
+}
+.sql .trainer-card .row { display:flex; gap: 8px; align-items:center; }
+.sql .trainer-card .mini { padding: 0.4rem 0.6rem; min-width: 40px; }
+.sql .trainer-card select { flex:1; }
+
+/* Prevent input overflow and allow shrinking alongside buttons */
+.sql .trainer-card .row { min-width: 0; }
+.sql .trainer-card input[type="text"],
+.sql input[type="text"].model-name {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Keep primary action buttons aligned at the bottom for equal visual height */
+.sql .trainer-card .actions,
+.sql .compare-card .actions {
+    margin-top: auto;
+}
+
+.sql .epoch-panel { margin-top: 0.75rem; }
+.sql .epoch-panel .bar { position: relative; height: 10px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden; }
+.sql .epoch-panel .bar span { position: absolute; left:0; top:0; bottom:0; width:0; background: linear-gradient(90deg, #4fd1ff, #9f7aea); transition: width .45s ease; }
+.sql .epoch-panel .epoch-line { margin-top: 6px; color:#cfe3ff; font-size: .9rem; }
+.sql .epoch-panel .log { margin-top: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: .85rem; color: var(--text); max-height: 120px; overflow:auto; border:1px solid var(--panel-border); border-radius: 8px; padding: 6px 8px; background: var(--panel-bg); backdrop-filter: blur(10px); }
+
+.sql .compare-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 10px; margin-top: 10px; }
+.sql .model-label { font-size: .9rem; color: var(--text); opacity:.85; margin-bottom: 6px; }
+.sql .compare-pre { white-space: pre-wrap; background: var(--panel-bg); border:1px solid var(--panel-border); border-radius: 8px; padding: 8px; min-height: 100px; backdrop-filter: blur(10px); }
+
+/* Compare card sizing and prompt field behavior */
+.sql .compare-card { min-height: 260px; }
+.sql .compare-card .row { min-width: 0; }
+.sql .compare-card input[type="text"] {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sql .trainer-card .note {
+    margin-top: 0.6rem;
+    color: var(--text);
+    opacity:.8;
+    font-size: 0.9rem;
+}
+.sql .metrics {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+    color: var(--text);
+    flex-wrap: wrap;
+}
+.sql .metric-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 0.65rem 1rem;
+    flex: 1;
+    min-width: 150px;
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+}
+
+@media (max-width: 700px) {
+    .sql .grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "schema"
+            "pairs"
+            "trainer"
+            "compare";
+    }
+}

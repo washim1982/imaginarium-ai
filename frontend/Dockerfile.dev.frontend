@@ -1,0 +1,13 @@
+# ---------- FRONTEND DEV IMAGE ----------
+FROM node:18-bullseye
+
+WORKDIR /app
+
+# Install dependencies only (no COPY .)
+COPY package*.json ./
+RUN npm install --legacy-peer-deps
+
+# Default port for react-scripts
+EXPOSE 3000
+
+CMD ["npm", "start"]

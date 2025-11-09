@@ -1,0 +1,19 @@
+.settings-card {
+  padding: 1rem;
+}
+.settings-title {
+  margin: 0 0 .5rem 0;
+}
+.theme-options {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-auto-rows: min-content;
+  column-gap: 10px;
+  row-gap: 8px;
+  margin-top: .25rem;
+  align-items: center;
+}
+.theme-option { display: contents; color: var(--text); }
+.theme-option input { margin: 0; }
+.theme-option span { white-space: nowrap; }
+.settings-note { opacity: .8; margin-top: 12px; }

@@ -1,0 +1,48 @@
+@import "./page-base.css";
+.translation textarea {
+    height: 220px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.translation label {
+    display:block;
+    font-weight:500;
+    margin-bottom:.3rem;
+    color:#ddd;
+}
+
+.translation .translator-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.translation .upload-card {
+    max-width: 520px;
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.translation .upload-card input[type="file"] {
+    flex: 1;
+    min-width: 220px;
+    padding: 0.45rem;
+    border-radius: 12px;
+    background: rgba(14,14,14,0.85);
+    border: 1px solid #232323;
+    color: #d8e6ff;
+}
+
+.translation .upload-card select {
+    min-width: 180px;
+}
+
+.translation .note {
+    font-size: 0.9rem;
+    color: #9fb5d4;
+    margin-top: -0.3rem;
+    margin-bottom: 0.6rem;
+}

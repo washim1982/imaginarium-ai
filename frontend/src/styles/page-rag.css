@@ -1,0 +1,42 @@
+@import "./page-base.css";
+.rag .card {
+margin-bottom: .75rem;
+display: flex;
+gap: .75rem;
+flex-wrap: wrap;
+align-items: center;
+max-width: 520px;
+}
+.rag .card input[type="file"],
+.rag .card input {
+flex: 1;
+min-width: 220px;
+padding: 0.45rem;
+border-radius: 12px;
+background: var(--panel-bg);
+border: 1px solid var(--panel-border);
+color: var(--text);
+backdrop-filter: blur(10px);
+}
+.rag .answer-stream {
+margin-top: 1rem;
+background: var(--panel-bg);
+border: 1px solid var(--panel-border);
+border-radius: 12px;
+padding: 1rem;
+min-height: 160px;
+white-space: pre-wrap;
+word-break: break-word;
+font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+backdrop-filter: blur(10px);
+}
+.rag .ok {
+margin-left: .5rem;
+color: #00ffb0;
+font-weight: 500;
+}
+.rag .note {
+margin-top: .25rem;
+color: #9fb5d4;
+font-size: 0.9rem;
+}

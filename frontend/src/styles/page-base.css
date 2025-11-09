@@ -1,0 +1,135 @@
+.page { 
+    padding: 1rem 1.25rem; 
+    margin: 0 auto;
+    width: 100%;
+    max-width: 960px;
+    box-sizing: border-box;
+}
+.page h2 { 
+    margin: 0 0 1rem; font-weight: 600;
+ }
+.card { 
+    background: var(--panel-bg); 
+    border: 1px solid var(--panel-border); 
+    border-radius: 16px; 
+    padding: 1rem; 
+    margin-bottom: 1rem; 
+    backdrop-filter: blur(10px);
+}
+button { 
+    padding: .6rem 1rem; 
+    border-radius: 10px; 
+    border: 1px solid var(--panel-border); 
+    background: var(--panel-bg); 
+    color: var(--text);
+    cursor: pointer; 
+    backdrop-filter: blur(10px);
+}
+button:disabled { 
+    opacity: .5; 
+    cursor: not-allowed; 
+}
+label { 
+    display:block; 
+    margin: .5rem 0 .25rem; 
+    color: var(--text); 
+    opacity: .85;
+}
+input, select, textarea { 
+    width: 100%; 
+    background: var(--panel-bg); 
+    border: 1px solid var(--panel-border); 
+    color: var(--text); 
+    border-radius: 10px; 
+    padding: .6rem .7rem; 
+    backdrop-filter: blur(10px);
+}
+pre { 
+    white-space: pre-wrap; 
+    word-break: break-word; 
+}
+.table-scroll { 
+    max-height: 260px; 
+    overflow:auto; 
+    border: 1px solid var(--panel-border); 
+    border-radius: 12px; 
+    background: var(--panel-bg);
+    backdrop-filter: blur(10px);
+}
+.table-scroll table { 
+    width: 100%; 
+    border-collapse: collapse; 
+}
+.table-scroll th, .table-scroll td { 
+    padding: .5rem .6rem; 
+    border-bottom: 1px solid #222; 
+    font-size: .95rem; 
+}
+.controls { 
+    display: flex; 
+    align-items: center; 
+    gap: .5rem; 
+    margin: .75rem 0; 
+}
+.chart { 
+    max-width: 100%; 
+    border: 1px solid #222; 
+    border-radius: 12px; 
+}
+.grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 1rem; 
+}
+.triple { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr 1fr; 
+    gap: 1rem; }
+.output { 
+    background: var(--panel-bg); 
+    padding: 1rem; 
+    min-height: 160px; 
+    border: 1px solid var(--panel-border); 
+    border-radius: 12px; 
+    backdrop-filter: blur(10px);
+}
+.result { 
+    margin-top: .75rem; 
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .triple {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .page {
+        padding: 1rem;
+        max-width: 100%;
+    }
+
+    .controls {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .triple {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    button {
+        width: 100%;
+    }
+}
